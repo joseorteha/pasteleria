@@ -6,6 +6,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    console.log('Buscando pedido con ID:', params.id)
+    
     const { data, error } = await supabase
       .from('pedidos')
       .select('*')
@@ -14,12 +16,27 @@ export async function GET(
 
     if (error) {
       console.error('Error fetching pedido:', error)
+      console.error('ID buscado:', params.id)
+      
+      // Verificar si hay pedidos en la base de datos
+      const { data: allPedidos, error: listError } = await supabase
+        .from('pedidos')
+        .select('id, created_at, cliente_nombre')
+        .limit(5)
+      
+      console.log('Pedidos disponibles:', allPedidos)
+      
       return NextResponse.json(
-        { error: 'Pedido no encontrado' },
+        { 
+          error: 'Pedido no encontrado',
+          searchedId: params.id,
+          availablePedidos: allPedidos || []
+        },
         { status: 404 }
       )
     }
 
+    console.log('Pedido encontrado:', data)
     return NextResponse.json(data)
   } catch (error) {
     console.error('Error in pedidos API:', error)

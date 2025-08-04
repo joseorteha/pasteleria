@@ -29,10 +29,16 @@ export default function ConfirmacionPage() {
   useEffect(() => {
     const fetchPedido = async () => {
       try {
+        console.log('Buscando pedido:', pedidoId)
         const response = await fetch(`/api/pedidos/${pedidoId}`)
+        
         if (response.ok) {
           const data = await response.json()
+          console.log('Pedido encontrado:', data)
           setPedido(data)
+        } else {
+          const errorData = await response.json()
+          console.error('Error en la respuesta:', errorData)
         }
       } catch (error) {
         console.error('Error fetching pedido:', error)
