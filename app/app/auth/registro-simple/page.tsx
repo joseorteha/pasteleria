@@ -64,7 +64,7 @@ export default function RegistroSimplePage() {
             nombre: formData.nombre,
             telefono: formData.telefono
           },
-          emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`
+          emailRedirectTo: `https://pasteleria-mairim.vercel.app/auth/callback`
         }
       })
 

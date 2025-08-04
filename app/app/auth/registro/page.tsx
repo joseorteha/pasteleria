@@ -65,7 +65,7 @@ export default function RegistroPage() {
             nombre: formData.nombre,
             telefono: formData.telefono
           },
-          emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`
+          emailRedirectTo: `https://pasteleria-mairim.vercel.app/auth/callback`
         }
       })
 
@@ -134,7 +134,7 @@ export default function RegistroPage() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`
+          redirectTo: `https://pasteleria-mairim.vercel.app/auth/callback`
         }
       })
 
