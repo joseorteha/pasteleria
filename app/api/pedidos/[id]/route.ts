@@ -32,7 +32,8 @@ export async function GET(
         { 
           error: 'Pedido no encontrado',
           searchedId: params.id,
-          availablePedidos: allPedidos || []
+          availablePedidos: allPedidos || [],
+          debug_serviceKeyLoaded: !!process.env.SUPABASE_SERVICE_ROLE_KEY
         },
         { status: 404 }
       )
