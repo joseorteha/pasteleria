@@ -170,23 +170,27 @@ export default function PerfilPage() {
       }
 
       // Cargar favoritos
-      const { data: favoritosData } = await supabase
+      const { data: favoritosData, error: favoritosError } = await supabase
         .from('favoritos')
         .select(`
           id,
-          producto:productos(id, nombre, precio, imagen_url)
+          producto_id,
+          productos!inner(id, nombre, precio, imagen_url)
         `)
         .eq('usuario_id', userId)
+
+      console.log('Favoritos data:', favoritosData)
+      console.log('Favoritos error:', favoritosError)
 
       if (favoritosData) {
         // Transformar los datos para que coincidan con la interfaz Favorito
         const favoritosTransformados = favoritosData.map((favorito: any) => ({
           id: favorito.id,
           producto: {
-            id: favorito.producto.id,
-            nombre: favorito.producto.nombre,
-            precio: favorito.producto.precio,
-            imagen_url: favorito.producto.imagen_url
+            id: favorito.productos.id,
+            nombre: favorito.productos.nombre,
+            precio: favorito.productos.precio,
+            imagen_url: favorito.productos.imagen_url
           }
         }))
         setFavoritos(favoritosTransformados)
