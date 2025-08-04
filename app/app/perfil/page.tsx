@@ -172,28 +172,43 @@ export default function PerfilPage() {
       // Cargar favoritos
       const { data: favoritosData, error: favoritosError } = await supabase
         .from('favoritos')
-        .select(`
-          id,
-          producto_id,
-          productos!inner(id, nombre, precio, imagen_url)
-        `)
+        .select('id, producto_id')
         .eq('usuario_id', userId)
 
       console.log('Favoritos data:', favoritosData)
       console.log('Favoritos error:', favoritosError)
 
-      if (favoritosData) {
-        // Transformar los datos para que coincidan con la interfaz Favorito
-        const favoritosTransformados = favoritosData.map((favorito: any) => ({
-          id: favorito.id,
-          producto: {
-            id: favorito.productos.id,
-            nombre: favorito.productos.nombre,
-            precio: favorito.productos.precio,
-            imagen_url: favorito.productos.imagen_url
-          }
-        }))
-        setFavoritos(favoritosTransformados)
+      if (favoritosData && favoritosData.length > 0) {
+        // Obtener los productos de los favoritos
+        const productoIds = favoritosData.map((favorito: any) => favorito.producto_id)
+        
+        const { data: productosData, error: productosError } = await supabase
+          .from('productos')
+          .select('id, nombre, precio, imagen_url')
+          .in('id', productoIds)
+
+        console.log('Productos data:', productosData)
+        console.log('Productos error:', productosError)
+
+        if (productosData) {
+          // Crear un mapa de productos para acceso rápido
+          const productosMap = productosData.reduce((map: any, producto: any) => {
+            map[producto.id] = producto
+            return map
+          }, {})
+
+          // Transformar los datos para que coincidan con la interfaz Favorito
+          const favoritosTransformados = favoritosData.map((favorito: any) => ({
+            id: favorito.id,
+            producto: productosMap[favorito.producto_id] || {
+              id: favorito.producto_id,
+              nombre: 'Producto no encontrado',
+              precio: 0,
+              imagen_url: ''
+            }
+          }))
+          setFavoritos(favoritosTransformados)
+        }
       }
 
     } catch (error) {
