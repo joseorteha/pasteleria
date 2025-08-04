@@ -133,7 +133,17 @@ export default function PerfilPage() {
         .eq('usuario_id', userId)
 
       if (favoritosData) {
-        setFavoritos(favoritosData)
+        // Transformar los datos para que coincidan con la interfaz Favorito
+        const favoritosTransformados = favoritosData.map((favorito: any) => ({
+          id: favorito.id,
+          producto: {
+            id: favorito.producto.id,
+            nombre: favorito.producto.nombre,
+            precio: favorito.producto.precio,
+            imagen_url: favorito.producto.imagen_url
+          }
+        }))
+        setFavoritos(favoritosTransformados)
       }
 
     } catch (error) {
