@@ -18,13 +18,14 @@ import { supabase } from '@/lib/supabase'
 import { createPaymentPreference, formatCartItemsForMP } from '@/lib/mercadopago'
 import toast from 'react-hot-toast'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { User } from '@supabase/supabase-js'
 
 export default function CarritoPage() {
   const router = useRouter()
   const { items, getTotal, clearCart, updateQuantity, removeItem } = useCartStore()
   const [loading, setLoading] = useState(false)
   const [authLoading, setAuthLoading] = useState(true)
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [clienteData, setClienteData] = useState({
     nombre: '',
     telefono: '',

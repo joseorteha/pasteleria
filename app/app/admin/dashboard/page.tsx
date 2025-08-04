@@ -91,7 +91,7 @@ export default function AdminDashboard() {
 
       // Calculate stats
       const totalPedidos = pedidosData?.length || 0
-      const pedidosPendientes = pedidosData?.filter(p => p.estado_pedido === 'Pendiente').length || 0
+              const pedidosPendientes = pedidosData?.filter(p => p.estado === 'Pendiente').length || 0
       const totalProductos = productosData?.length || 0
       const today = new Date().toDateString()
       const ventasDelDia = pedidosData?.filter(p => 

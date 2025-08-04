@@ -195,7 +195,7 @@ export default function PedidosTab({ pedidos, onRefresh }: PedidosTabProps) {
                 <div>
                   <p className="text-sm text-muted-foreground mb-2">Cambiar estado:</p>
                   <Select
-                    value={selectedPedido.estado_pedido}
+                    value={selectedPedido.estado}
                     onValueChange={(value) => updateEstadoPedido(selectedPedido.id, value)}
                     disabled={loading === selectedPedido.id}
                   >
