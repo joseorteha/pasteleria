@@ -4,7 +4,7 @@
 -- 1. Crear un usuario de prueba
 INSERT INTO public.usuarios (id, nombre, email, telefono, direccion) 
 VALUES (
-  'test-user-id-123',
+  '12345678-1234-1234-1234-123456789abc',
   'Usuario de Prueba',
   'test@example.com',
   '2721234567',
@@ -17,7 +17,7 @@ VALUES (
   'test-pedido-123',
   150.00,
   'Pendiente',
-  'test-user-id-123',
+  '12345678-1234-1234-1234-123456789abc',
   'Usuario de Prueba',
   '2721234567',
   'Dirección de prueba',
@@ -27,7 +27,7 @@ VALUES (
 -- 3. Crear un favorito de prueba
 INSERT INTO public.favoritos (usuario_id, producto_id) 
 VALUES (
-  'test-user-id-123',
+  '12345678-1234-1234-1234-123456789abc',
   '1'
 ) ON CONFLICT DO NOTHING;
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase-server'
+import { createClient } from '@supabase/supabase-js'
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +8,21 @@ export async function GET(
   try {
     console.log('Buscando pedido con ID:', params.id)
     
-    const { data, error } = await supabaseAdmin
+    // Usar el cliente normal de Supabase en lugar del admin
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('Variables de entorno de Supabase no configuradas')
+      return NextResponse.json(
+        { error: 'Configuración de Supabase no encontrada' },
+        { status: 500 }
+      )
+    }
+    
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    
+    const { data, error } = await supabase
       .from('pedidos')
       .select('*')
       .eq('id', params.id)
@@ -19,7 +33,7 @@ export async function GET(
       console.error('ID buscado:', params.id)
       
       // Verificar si hay pedidos en la base de datos
-      const { data: allPedidos, error: listError } = await supabaseAdmin
+      const { data: allPedidos, error: listError } = await supabase
         .from('pedidos')
         .select('id, created_at, cliente_nombre')
         .limit(5)
