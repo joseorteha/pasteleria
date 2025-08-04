@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    console.log('Buscando pedido con ID:', params.id)
+    console.log('API Route: Buscando pedido con ID:', params.id)
     
     // Usar el cliente normal de Supabase
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -28,32 +28,20 @@ export async function GET(
       .eq('id', params.id)
       .single()
 
+    console.log('API Route: Resultado de búsqueda:', { data, error })
+
     if (error) {
-      console.error('Error fetching pedido:', error)
-      console.error('ID buscado:', params.id)
-      
-      // Verificar si hay pedidos en la base de datos
-      const { data: allPedidos, error: listError } = await supabase
-        .from('pedidos')
-        .select('id, created_at, cliente_nombre')
-        .limit(5)
-      
-      console.log('Pedidos disponibles:', allPedidos)
-      
+      console.error('API Route: Error fetching pedido:', error)
       return NextResponse.json(
-        { 
-          error: 'Pedido no encontrado',
-          searchedId: params.id,
-          availablePedidos: allPedidos || []
-        },
+        { error: 'Pedido no encontrado', searchedId: params.id },
         { status: 404 }
       )
     }
 
-    console.log('Pedido encontrado:', data)
+    console.log('API Route: Pedido encontrado:', data)
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Error in pedidos API:', error)
+    console.error('API Route: Error in pedidos API:', error)
     return NextResponse.json(
       { error: 'Error interno del servidor' },
       { status: 500 }
