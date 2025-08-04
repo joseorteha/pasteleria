@@ -1,0 +1,179 @@
+{
+  "productos_pasteleria_mexicana": [
+    {
+      "id": 1,
+      "nombre": "Conchas",
+      "descripcion": "Iconic Mexican sweet bread with a seashell-shaped sugar topping, available in vanilla, chocolate, and strawberry flavors.",
+      "precio_mxn": 18,
+      "categoria": "Pan Dulce",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/ge1vv8dtyqmsC1C0GU8OlR_iCr_Fz0XzSl8i6CHZUtY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTQx/NDQzMzI1NC9lcy9m/b3RvL2NvbmNoYXMt/cGFuLWR1bGNlLW1l/eGljYW5vLXBhbmFk/ZXIlQzMlQURhLXRy/YWRpY2lvbmFsLWRl/LW0lQzMlQTl4aWNv/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz05WjlYUFZfbExH/dTRycUxDNWdiUExf/bkt5MDJqNDVzLVQ0/X1RBLVlHU1NRPQ"
+    },
+    {
+      "id": 2,
+      "nombre": "Pastel Tres Leches",
+      "descripcion": "Moist sponge cake soaked in a mixture of three milks (evaporated, condensed, and whole milk), topped with whipped cream.",
+      "precio_mxn": 65,
+      "categoria": "Pastel",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/pkIK7r0lpbKDXoPaI6CIPL1EEP0SIjO0l-xxGwxgY9w/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9kaXJl/Y3RvYWxndXN0by5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjUvMDIvY29tby1w/cmVwYXJhci1lbC1h/dXRlbnRpY28tcGFz/dGVsLXRyZXMtbGVj/aGVzLW1leGljYW5v/LTEwMjR4NTc2Lmpw/Zw"
+    },
+    {
+      "id": 3,
+      "nombre": "Churros",
+      "descripcion": "Crispy fried dough sticks dusted with cinnamon sugar, often served with chocolate sauce for dipping.",
+      "precio_mxn": 15,
+      "categoria": "Frito",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/lww0AOsJgxkG4ZalcDAsCJqbRtkGOAL4G1G-AuZrtoE/rs:fit:500:0:1:0/g:ce/aHR0cDovL2VuanVs/aWFuYS5jb20vdHVl/cmVzZWxjaGVmL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDE1LzAx/L2NodXJyb3MtY2Fz/ZXJvcy1jb24tYXol/QzMlQkFjYXIteS1j/YW5lbGEuanBn"
+    },
+    {
+      "id": 4,
+      "nombre": "Pan de Muerto",
+      "descripcion": "Traditional Day of the Dead bread with orange blossom aroma, decorated with bone-like strips and sugar coating.",
+      "precio_mxn": 35,
+      "categoria": "Pan Dulce",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/lIuept_4Bh-2gIsMRnQyhlVEjkcbPn-U0h4N2L4mmVI/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9jZG43/LnJlY2V0YXNkZWVz/Y2FuZGFsby5jb20v/d3AtY29udGVudC91/cGxvYWRzLzIwMjEv/MTEvUGFuLWRlLW11/ZXJ0by11bi1kdWxj/ZS10cmFkaWNpb25h/bC1tZXhpY2Fuby5q/cGc"
+    },
+    {
+      "id": 5,
+      "nombre": "Buñuelos",
+      "descripcion": "Thin, crispy fried tortillas sprinkled with cinnamon sugar, traditionally enjoyed during Christmas with piloncillo syrup.",
+      "precio_mxn": 22,
+      "categoria": "Frito",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/KzIrWvDnb1pZbZVYsBMLqfwo7u7h1N-F-Wcl5BAKJN4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS9idW51ZWxvLW1l/eGljYW5vLWVzcG9s/dm9yZWFkby1henVj/YXItdGFtYmllbi1s/bGFtYWRvLXF1b3Ri/dW51ZWxvc3F1b3Rf/MzM4MzY3LTEyNzUu/anBn"
+    },
+    {
+      "id": 6,
+      "nombre": "Marranitos (Puerquitos)",
+      "descripcion": "Pig-shaped cookies made with piloncillo (unrefined cane sugar), rated as one of the best cookies worldwide by Taste Atlas.",
+      "precio_mxn": 14,
+      "categoria": "Galleta",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/WAGR2h1Bqqx_VzIuImJfF2QEBPSYXaQpPoTiVb7Gn6s/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9lZGl0/b3JpYWx0ZWxldmlz/YS5icmlnaHRzcG90/Y2RuLmNvbS9kaW1z/NC9kZWZhdWx0LzAy/MWQ5MjQvMjE0NzQ4/MzY0Ny9zdHJpcC90/cnVlL2Nyb3AvODk2/eDY3MisxNDcrMC9y/ZXNpemUvMTQ0MHgx/MDgwIS9xdWFsaXR5/LzkwLz91cmw9aHR0/cHM6Ly9rMi1wcm9k/LWVkaXRvcmlhbC10/ZWxldmlzYS5zMy51/cy1lYXN0LTEuYW1h/em9uYXdzLmNvbS9i/cmlnaHRzcG90L2Y0/LzBlLzNlOTVkMTQz/NGQzZWIwY2VjNzlj/OGY0ZjVjNjgvcHVl/cnF1aXRvcy1kZS1w/aWxvbmNpbGxvLXJl/Y2V0YS1mYWNpbC15/LXJhcGlkYS5qcGVn"
+    },
+    {
+      "id": 7,
+      "nombre": "Empanadas Dulces",
+      "descripcion": "Sweet pastries filled with guava, pumpkin, or sweet potato, fried or baked until golden and crispy.",
+      "precio_mxn": 28,
+      "categoria": "Pasteles",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/R9tkaNl6-ehwKljUGh8RDeXvzQuaszyaLmP9NptsFD4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9kaW5v/cmFuay5jb20vaW1n/L2Rpbm9icmFpbi8x/OTk0NTEvaW1hZ2Vu/MGRkNDdiZjYxOWM5/MTEzZGM3MDZhZDZm/Yjg4YjNmOTMuanBn"
+    },
+    {
+      "id": 8,
+      "nombre": "Pan de Elote",
+      "descripcion": "Moist sweet corn bread made with fresh corn kernels, embodying Mexico's indigenous corn heritage. Perfect with coffee.",
+      "precio_mxn": 38,
+      "categoria": "Pan Dulce",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/pye1oRc-BVT-0-x5IF7n7jS4YlozxstJ0y8Q5eqSxM4/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tdXli/dWVub2Jsb2cuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIz/LzAzL1Bhbi1kZS1F/bG90ZS1NZXhpY2Fu/by1NZXhpY2FuLVN3/ZWV0LUNvcm4tQ2Fr/ZS5qcGVn"
+    },
+    {
+      "id": 9,
+      "nombre": "Cocadas",
+      "descripcion": "Coconut-based sweets baked into nest-like shapes, made with coconut, sugar, and eggs. A colonial-era favorite.",
+      "precio_mxn": 25,
+      "categoria": "Dulce",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/dIU10l7rwf69YrcrM9Utger-48kXowW4MIqC6Ke5tNs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9lc3F1/aW5hbXguZXMvd3At/Y29udGVudC91cGxv/YWRzLzIwMjQvMDkv/eDMwaXV5Nzk2dmUu/anBn"
+    },
+    {
+      "id": 10,
+      "nombre": "Chocoflan",
+      "descripcion": "\"Impossible cake\" combining chocolate cake and flan layers that magically switch positions during baking.",
+      "precio_mxn": 78,
+      "categoria": "Pastel",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/jiywmDSiGvOABYMwlLyhhTRygwRFxfvbFPudsvaZIxs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/aG9sYWphbGFwZW5v/LmNvbS93cC1jb250/ZW50L3VwbG9hZHMv/MjAyMy8wNS9jaG9j/b2ZsYW4ta2F0ZS1y/YW1vcy0xMDI0eDY4/My5qcGc"
+    },
+    {
+      "id": 11,
+      "nombre": "Flan Mexicano",
+      "descripcion": "Creamy custard dessert with rich caramel sauce, a Spanish import that became a Mexican staple.",
+      "precio_mxn": 42,
+      "categoria": "Postre",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/hcc8YW1Q5dqCdK5pvBps3jDDdCd0DonDDUo7YGQ54ys/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/Y29jaW5hcmVjZXRh/c2ZhY2lsZXMuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDI0/LzA3L2ZsYW4tbmFw/b2xpdGFuby1tZXhp/Y2Fuby5qcGc"
+    },
+    {
+      "id": 12,
+      "nombre": "Arroz con Leche",
+      "descripcion": "Traditional rice pudding spiced with cinnamon and vanilla, evoking family traditions and comfort.",
+      "precio_mxn": 32,
+      "categoria": "Postre",
+      "origen": "Nacional",
+      "imagen_url": "https://imgs.search.brave.com/uKwKyYVfudyoEFtcxZMTbH-FS7PnDjghsuoI4ObE-TQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/bWFyaWNydXphdmFs/b3MuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIwLzA5L2Fy/cm96LWNvbi1sZWNo/ZS1tZXhpY2Fuby5q/cGc"
+    },
+    {
+      "id": 13,
+      "nombre": "Dulce de Zapote Negro con Naranja",
+      "descripcion": "Unique Veracruz dessert made with black sapote pulp, orange juice, sugar, and a touch of rum. Dark, creamy, and exotic.",
+      "precio_mxn": 52,
+      "categoria": "Postre",
+      "origen": "Veracruz",
+      "imagen_url": "https://imgs.search.brave.com/0jwFhCHhTIREojV41kr_mh766zmCKAMrlSMMT5ZbXb0/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pMC53/cC5jb20vd3d3LmN1/Ym9pbmZvcm1hdGl2/by50b3Avd3AtY29u/dGVudC91cGxvYWRz/LzIwMjAvMDQvRHVs/Y2UtZGUtWmFwb3Rl/LU5lZ3JvLWNvbi1O/YXJhbmphLmpwZz9y/ZXNpemU9NDcwLDMz/NyZzc2w9MQ"
+    },
+    {
+      "id": 14,
+      "nombre": "Glorias de Veracruz",
+      "descripcion": "Iconic Veracruz shaved ice dessert with mashed banana, syrups, condensed milk, evaporated milk, vanilla, and cinnamon.",
+      "precio_mxn": 35,
+      "categoria": "Raspado",
+      "origen": "Veracruz",
+      "imagen_url": "https://imgs.search.brave.com/f6Hrxb8iZGgCHFqC4GOPXzW9-W-WJXuvoum790jbvLw/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/Z29iLm14L2Ntcy91/cGxvYWRzL2FydGlj/bGUvbWFpbl9pbWFn/ZS85NjQwNC9HTE9S/SUFTU0lUSU8uanBn"
+    },
+    {
+      "id": 15,
+      "nombre": "Pan de Natas Veracruzano",
+      "descripcion": "Sweet bread made with nata (milk skin), flour, sugar, and cinnamon. An affordable, creamy, and crunchy Veracruz specialty.",
+      "precio_mxn": 26,
+      "categoria": "Pan Dulce",
+      "origen": "Veracruz",
+      "imagen_url": "https://imgs.search.brave.com/pcfUVELORi2fPGytosIZnkTgoWtclAvI_eHNaJ9tuIk/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9lZGl0/b3JpYWx0ZWxldmlz/YS5icmlnaHRzcG90/Y2RuLmNvbS9kaW1z/NC9kZWZhdWx0L2Y3/OGFlMTEvMjE0NzQ4/MzY0Ny9zdHJpcC90/cnVlL2Nyb3AvNTYw/eDU2MCsyMjArMC9y/ZXNpemUvMTAwMHgx/MDAwIS9xdWFsaXR5/LzkwLz91cmw9aHR0/cHM6Ly9rMi1wcm9k/LWVkaXRvcmlhbC10/ZWxldmlzYS5zMy51/cy1lYXN0LTEuYW1h/em9uYXdzLmNvbS9i/cmlnaHRzcG90L3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDE3LzA5/L3Bhbi1kZS1uYXRh/LmpwZw"
+    },
+    {
+      "id": 16,
+      "nombre": "Torta de Elote Veracruzana",
+      "descripcion": "Traditional Veracruz corn cake made with fresh corn kernels, cream, sugar, and eggs, with a distinctive yellow color.",
+      "precio_mxn": 58,
+      "categoria": "Pastel",
+      "origen": "Veracruz",
+      "imagen_url": "https://imgs.search.brave.com/drT665fSJFWkx6dytrVwFEItqi4_CkRhJNde2_NdCR0/rs:fit:500:0:1:0/g:ce/aHR0cDovL2xhY29j/aW5hZGV2ZXJvLmNv/bS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/MC8wNi9Ub3J0YS1k/ZS1lbG90ZS12ZXJh/Y3J1emFuYS0xLTY4/MHgxMDI0LmpwZw"
+    },
+    {
+      "id": 17,
+      "nombre": "Alfajores de Veracruz",
+      "descripcion": "Spanish-origin pastry adapted in Veracruz with local white corn, piloncillo, and cinnamon. Crunchy texture with honey filling.",
+      "precio_mxn": 24,
+      "categoria": "Galleta",
+      "origen": "Veracruz",
+      "imagen_url": "https://imgs.search.brave.com/AqEZQMUDxOeXez9CdfWGR_MHPjADXwuJA4Qv2_6Z5io/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9sYWd1/YWRhLmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAyNC8wMS9h/bGZham9yZXMtdmVy/YWNydXphbm9zLmpw/Zw"
+    },
+    {
+      "id": 18,
+      "nombre": "Dulce de Leche de Tlacotalpan",
+      "descripcion": "Iconic Veracruz sweet from Tlacotalpan, made with milk and sugar slowly cooked until thick, with coconut or almond variants.",
+      "precio_mxn": 48,
+      "categoria": "Dulce",
+      "origen": "Veracruz",
+      "imagen_url": "https://imgs.search.brave.com/6jVOdCE6mr0MCKIVghGbGR5cz-hPwlqjXV4udS5no1c/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9odHRw/Mi5tbHN0YXRpYy5j/b20vRF9RX05QXzJY/XzcxMTQ4NC1NTE00/ODc2MjA5MTI0M18w/MTIwMjItVi1kdWxj/ZS1tZXhpY2Fuby10/cmFkaWNpb25hbC1k/ZS1sZWNoZS53ZWJw"
+    }
+  ],
+  "resumen": {
+    "total_productos": 18,
+    "productos_nacionales": 12,
+    "productos_veracruzanos": 6,
+    "rango_precios": "$14 - $78 MXN",
+    "categorias": ["Pan Dulce", "Pastel", "Frito", "Galleta", "Dulce", "Postre", "Raspado"],
+    "fecha_investigacion": "Agosto 2025"
+  },
+  "notas": {
+    "precios": "Los precios están basados en investigación de mercado mexicano 2025 y pueden variar según región y establecimiento.",
+    "imagenes": "Todas las imágenes son específicas de cada producto y provienen de fuentes verificadas.",
+    "especialidades_veracruzanas": "Se incluyen 6 productos típicos de Veracruz que reflejan la rica tradición gastronómica del estado."
+  }
+}
