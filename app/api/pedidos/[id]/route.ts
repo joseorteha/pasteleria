@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET(
   request: NextRequest,
@@ -8,7 +8,7 @@ export async function GET(
   try {
     console.log('Buscando pedido con ID:', params.id)
     
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('pedidos')
       .select('*')
       .eq('id', params.id)
@@ -19,7 +19,7 @@ export async function GET(
       console.error('ID buscado:', params.id)
       
       // Verificar si hay pedidos en la base de datos
-      const { data: allPedidos, error: listError } = await supabase
+      const { data: allPedidos, error: listError } = await supabaseAdmin
         .from('pedidos')
         .select('id, created_at, cliente_nombre')
         .limit(5)
