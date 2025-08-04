@@ -99,7 +99,7 @@ export default function AdminDashboard() {
       ).reduce((sum, p) => sum + p.total, 0) || 0
       
       const totalComentarios = comentariosData?.length || 0
-      const promedioCalificacion = comentariosData?.length > 0 
+      const promedioCalificacion = comentariosData && comentariosData.length > 0 
         ? comentariosData.reduce((sum, c) => sum + c.calificacion, 0) / comentariosData.length 
         : 0
       
