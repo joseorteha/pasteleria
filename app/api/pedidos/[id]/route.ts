@@ -7,6 +7,8 @@ export async function GET(
 ) {
   try {
     console.log('Buscando pedido con ID:', params.id)
+    // DEBUG: Verificar si la clave de servicio está cargada
+    console.log('SUPABASE_SERVICE_ROLE_KEY cargada:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
     
     const { data, error } = await supabaseAdmin
       .from('pedidos')
