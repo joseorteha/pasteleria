@@ -119,6 +119,9 @@ export default function PerfilPage() {
         .eq('usuario_id', userId)
         .order('fecha_creacion', { ascending: false })
 
+      console.log('Pedidos cargados para usuario:', userId)
+      console.log('Pedidos encontrados:', pedidosData)
+
       if (pedidosData) {
         setPedidos(pedidosData)
       }
@@ -359,13 +362,16 @@ export default function PerfilPage() {
                           <p className="text-sm text-gray-600">
                             {pedido.items?.length || 0} productos
                           </p>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => router.push(`/confirmacion/${pedido.id}`)}
-                          >
-                            Ver Detalles
-                          </Button>
+                                                     <Button 
+                             variant="outline" 
+                             size="sm"
+                             onClick={() => {
+                               console.log('Navegando a confirmación con ID:', pedido.id)
+                               router.push(`/confirmacion/${pedido.id}`)
+                             }}
+                           >
+                             Ver Detalles
+                           </Button>
                         </div>
                       </div>
                     ))}
