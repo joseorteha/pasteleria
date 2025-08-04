@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -20,27 +19,41 @@ interface ProductosTabProps {
   onRefresh: () => void
 }
 
-const categorias = ['Pasteles', 'Cupcakes', 'Postres', 'Galletas', 'Panes']
+const categorias = ['Pan Dulce', 'Pastel', 'Frito', 'Galleta', 'Dulce', 'Postre', 'Raspado', 'Pasteles']
 
 export default function ProductosTab({ productos, onRefresh }: ProductosTabProps) {
   const [selectedProducto, setSelectedProducto] = useState<Producto | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
+    id: '',
     nombre: '',
     descripcion: '',
     precio: '',
     imagen_url: '',
-    categoria: 'Pasteles'
+    categoria: 'Pan Dulce',
+    tiempo_preparacion: '',
+    porciones: '',
+    ingredientes: '',
+    alergenos: '',
+    conservacion: '',
+    origen: 'Nacional'
   })
 
   const resetForm = () => {
     setFormData({
+      id: '',
       nombre: '',
       descripcion: '',
       precio: '',
       imagen_url: '',
-      categoria: 'Pasteles'
+      categoria: 'Pan Dulce',
+      tiempo_preparacion: '',
+      porciones: '',
+      ingredientes: '',
+      alergenos: '',
+      conservacion: '',
+      origen: 'Nacional'
     })
     setSelectedProducto(null)
   }
@@ -52,11 +65,18 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
 
   const openEditDialog = (producto: Producto) => {
     setFormData({
+      id: producto.id,
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio: producto.precio.toString(),
       imagen_url: producto.imagen_url,
-      categoria: producto.categoria
+      categoria: producto.categoria,
+      tiempo_preparacion: producto.tiempo_preparacion || '',
+      porciones: producto.porciones || '',
+      ingredientes: Array.isArray(producto.ingredientes) ? producto.ingredientes.join(', ') : '',
+      alergenos: Array.isArray(producto.alergenos) ? producto.alergenos.join(', ') : '',
+      conservacion: producto.conservacion || '',
+      origen: producto.origen || 'Nacional'
     })
     setSelectedProducto(producto)
     setIsDialogOpen(true)
@@ -68,16 +88,26 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
 
     try {
       if (!formData.nombre || !formData.descripcion || !formData.precio || !formData.imagen_url) {
-        toast.error('Por favor completa todos los campos')
+        toast.error('Por favor completa todos los campos obligatorios')
         return
       }
 
+      // Generar ID único si es un nuevo producto
+      const productId = selectedProducto ? selectedProducto.id : crypto.randomUUID()
+
       const productData = {
+        id: productId,
         nombre: formData.nombre,
         descripcion: formData.descripcion,
         precio: parseFloat(formData.precio),
         imagen_url: formData.imagen_url,
-        categoria: formData.categoria
+        categoria: formData.categoria,
+        tiempo_preparacion: formData.tiempo_preparacion || null,
+        porciones: formData.porciones || null,
+        ingredientes: formData.ingredientes ? formData.ingredientes.split(',').map(i => i.trim()) : [],
+        alergenos: formData.alergenos ? formData.alergenos.split(',').map(a => a.trim()) : [],
+        conservacion: formData.conservacion || null,
+        origen: formData.origen || 'Nacional'
       }
 
       if (selectedProducto) {
@@ -111,9 +141,7 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
   }
 
   const handleDelete = async (productId: string) => {
-    if (!confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-      return
-    }
+    if (!confirm('¿Estás seguro de que quieres eliminar este producto?')) return
 
     try {
       const { error } = await supabase
@@ -142,13 +170,14 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
                 Nuevo Producto
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
                   {selectedProducto ? 'Editar Producto' : 'Nuevo Producto'}
                 </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Campos básicos */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="nombre">Nombre del producto *</Label>
@@ -172,20 +201,34 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
                   </div>
                 </div>
                 
-                <div>
-                  <Label htmlFor="categoria">Categoría *</Label>
-                  <Select value={formData.categoria} onValueChange={(value) => setFormData({ ...formData, categoria: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categorias.map((categoria) => (
-                        <SelectItem key={categoria} value={categoria}>
-                          {categoria}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="categoria">Categoría *</Label>
+                    <Select value={formData.categoria} onValueChange={(value) => setFormData({ ...formData, categoria: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categorias.map((categoria) => (
+                          <SelectItem key={categoria} value={categoria}>
+                            {categoria}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="origen">Origen</Label>
+                    <Select value={formData.origen} onValueChange={(value) => setFormData({ ...formData, origen: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Nacional">Nacional</SelectItem>
+                        <SelectItem value="Veracruz">Veracruz</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
                 <div>
@@ -207,7 +250,7 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
                     value={formData.imagen_url}
                     onChange={(e) => setFormData({ ...formData, imagen_url: e.target.value })}
                     required
-                    placeholder="https://imgs.search.brave.com/ju38_JNKZvBs9PW1SQgdCxCXBXNT8iV2rUlr1jbAM0M/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/bGFzZXJmaWNoZS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MjMvMDQvZm9ybXMu/cG5n"
+                    placeholder="https://imgs.search.brave.com/..."
                   />
                 </div>
 
@@ -225,6 +268,61 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
                     </div>
                   </div>
                 )}
+
+                {/* Campos adicionales */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="tiempo_preparacion">Tiempo de preparación</Label>
+                    <Input
+                      id="tiempo_preparacion"
+                      value={formData.tiempo_preparacion}
+                      onChange={(e) => setFormData({ ...formData, tiempo_preparacion: e.target.value })}
+                      placeholder="ej: 2-3 horas"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="porciones">Porciones</Label>
+                    <Input
+                      id="porciones"
+                      value={formData.porciones}
+                      onChange={(e) => setFormData({ ...formData, porciones: e.target.value })}
+                      placeholder="ej: 6-8 piezas"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="ingredientes">Ingredientes (separados por comas)</Label>
+                  <Textarea
+                    id="ingredientes"
+                    value={formData.ingredientes}
+                    onChange={(e) => setFormData({ ...formData, ingredientes: e.target.value })}
+                    placeholder="Harina de trigo, Azúcar, Huevos, Mantequilla..."
+                    rows={2}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="alergenos">Alérgenos (separados por comas)</Label>
+                  <Textarea
+                    id="alergenos"
+                    value={formData.alergenos}
+                    onChange={(e) => setFormData({ ...formData, alergenos: e.target.value })}
+                    placeholder="Gluten, Huevos, Lácteos..."
+                    rows={2}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="conservacion">Conservación</Label>
+                  <Textarea
+                    id="conservacion"
+                    value={formData.conservacion}
+                    onChange={(e) => setFormData({ ...formData, conservacion: e.target.value })}
+                    placeholder="ej: Conservar en lugar fresco hasta 3 días"
+                    rows={2}
+                  />
+                </div>
 
                 <div className="flex justify-end space-x-2">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
@@ -247,7 +345,7 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
             ) : (
               productos.map((producto) => (
                 <Card key={producto.id} className="overflow-hidden">
-                  <div className="relative aspect-[4/3]">
+                  <div className="relative h-48">
                     <Image
                       src={producto.imagen_url}
                       alt={producto.nombre}
@@ -256,36 +354,30 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
                     />
                   </div>
                   <CardContent className="p-4">
-                    <h3 className="font-semibold mb-1">{producto.nombre}</h3>
-                    <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                      {producto.descripcion}
-                    </p>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-lg font-bold text-brand-primary">
-                        ${producto.precio}
-                      </span>
-                      <span className="text-xs bg-brand-accent px-2 py-1 rounded text-brand-warm">
-                        {producto.categoria}
-                      </span>
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-semibold text-lg">{producto.nombre}</h3>
+                      <p className="font-bold text-brand-primary">${producto.precio}</p>
                     </div>
-                    <div className="flex space-x-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => openEditDialog(producto)}
-                        className="flex-1"
-                      >
-                        <Edit className="h-3 w-3 mr-1" />
-                        Editar
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleDelete(producto.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
+                    <p className="text-sm text-gray-600 mb-2">{producto.categoria}</p>
+                    <p className="text-sm text-gray-500 line-clamp-2">{producto.descripcion}</p>
+                    <div className="flex justify-between items-center mt-4">
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openEditDialog(producto)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(producto.id)}
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -296,4 +388,4 @@ export default function ProductosTab({ productos, onRefresh }: ProductosTabProps
       </Card>
     </div>
   )
-}
+} 

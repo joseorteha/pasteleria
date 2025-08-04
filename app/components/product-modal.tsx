@@ -41,81 +41,45 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
     }
   }
 
-  // Función para obtener información específica del producto
+  // Función para obtener información específica del producto desde la BD
   const getProductInfo = (product: Producto) => {
     const info = {
-      tiempoPreparacion: '',
-      porciones: '',
-      ingredientes: [] as string[],
-      alergenos: [] as string[],
-      conservacion: '',
+      tiempoPreparacion: product.tiempo_preparacion || 'No especificado',
+      porciones: product.porciones || 'No especificado',
+      ingredientes: Array.isArray(product.ingredientes) ? product.ingredientes : [],
+      alergenos: Array.isArray(product.alergenos) ? product.alergenos : [],
+      conservacion: product.conservacion || 'No especificado',
       icon: <Cake className="h-5 w-5" />
     }
 
+    // Asignar icono según categoría
     switch (product.categoria) {
       case 'Pastel':
-        info.tiempoPreparacion = '24-48 horas'
-        info.porciones = '8-12 personas'
-        info.ingredientes = ['Harina de trigo', 'Huevos frescos', 'Leche entera', 'Mantequilla sin sal', 'Azúcar refinada', 'Vainilla natural']
-        info.alergenos = ['Gluten', 'Huevos', 'Lácteos']
-        info.conservacion = 'Refrigerar a 4°C, consumir en 5 días'
         info.icon = <Cake className="h-5 w-5" />
         break
       case 'Pan Dulce':
-        info.tiempoPreparacion = '3-4 horas'
-        info.porciones = '8-10 unidades'
-        info.ingredientes = ['Harina de trigo', 'Levadura fresca', 'Agua tibia', 'Sal', 'Azúcar', 'Mantequilla']
-        info.alergenos = ['Gluten']
-        info.conservacion = 'Ambiente fresco, consumir en 2 días'
         info.icon = <Coffee className="h-5 w-5" />
         break
       case 'Frito':
-        info.tiempoPreparacion = '30-45 minutos'
-        info.porciones = '6-8 unidades'
-        info.ingredientes = ['Harina de trigo', 'Huevos', 'Aceite vegetal', 'Azúcar', 'Canela', 'Sal']
-        info.alergenos = ['Gluten', 'Huevos']
-        info.conservacion = 'Consumir inmediatamente o guardar en contenedor hermético'
         info.icon = <Cookie className="h-5 w-5" />
         break
       case 'Galleta':
-        info.tiempoPreparacion = '1-2 horas'
-        info.porciones = '24 unidades'
-        info.ingredientes = ['Harina de trigo', 'Mantequilla', 'Azúcar morena', 'Huevos', 'Vainilla', 'Canela']
-        info.alergenos = ['Gluten', 'Huevos', 'Lácteos']
-        info.conservacion = 'Contenedor hermético, consumir en 7 días'
         info.icon = <Cookie className="h-5 w-5" />
         break
       case 'Dulce':
-        info.tiempoPreparacion = '2-3 horas'
-        info.porciones = '12-15 unidades'
-        info.ingredientes = ['Coco rallado', 'Azúcar', 'Huevos', 'Vainilla', 'Mantequilla']
-        info.alergenos = ['Huevos', 'Lácteos']
-        info.conservacion = 'Contenedor hermético, consumir en 5 días'
         info.icon = <Cake className="h-5 w-5" />
         break
       case 'Postre':
-        info.tiempoPreparacion = '4-6 horas'
-        info.porciones = '6-8 personas'
-        info.ingredientes = ['Leche condensada', 'Huevos', 'Vainilla', 'Caramelo', 'Crema de leche']
-        info.alergenos = ['Huevos', 'Lácteos']
-        info.conservacion = 'Refrigerar, consumir en 3 días'
         info.icon = <Cake className="h-5 w-5" />
         break
       case 'Raspado':
-        info.tiempoPreparacion = '15-20 minutos'
-        info.porciones = '1 porción'
-        info.ingredientes = ['Hielo', 'Plátano', 'Leche condensada', 'Vainilla', 'Canela', 'Jarabes naturales']
-        info.alergenos = ['Lácteos']
-        info.conservacion = 'Consumir inmediatamente'
-        info.icon = <Cake className="h-5 w-5" />
+        info.icon = <Coffee className="h-5 w-5" />
         break
       default:
-        info.tiempoPreparacion = '2-4 horas'
-        info.porciones = '4-6 personas'
-        info.ingredientes = ['Ingredientes frescos', 'Sin conservadores artificiales']
-        info.alergenos = ['Consultar']
-        info.conservacion = 'Refrigerar según indicaciones'
+        info.icon = <Cake className="h-5 w-5" />
     }
+
+    return info
 
     return info
   }

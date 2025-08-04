@@ -11,6 +11,13 @@ export interface Database {
           precio: number
           imagen_url: string
           categoria: string
+          tiempo_preparacion?: string | null
+          porciones?: string | null
+          ingredientes?: string[] | null
+          alergenos?: string[] | null
+          conservacion?: string | null
+          origen?: string | null
+          activo?: boolean | null
         }
         Insert: {
           id?: string
@@ -20,6 +27,13 @@ export interface Database {
           precio: number
           imagen_url: string
           categoria: string
+          tiempo_preparacion?: string | null
+          porciones?: string | null
+          ingredientes?: string[] | null
+          alergenos?: string[] | null
+          conservacion?: string | null
+          origen?: string | null
+          activo?: boolean | null
         }
         Update: {
           id?: string
@@ -29,6 +43,13 @@ export interface Database {
           precio?: number
           imagen_url?: string
           categoria?: string
+          tiempo_preparacion?: string | null
+          porciones?: string | null
+          ingredientes?: string[] | null
+          alergenos?: string[] | null
+          conservacion?: string | null
+          origen?: string | null
+          activo?: boolean | null
         }
       }
       pedidos: {
@@ -84,6 +105,13 @@ export interface Producto {
   precio: number
   imagen_url: string
   categoria: string
+  tiempo_preparacion?: string | null
+  porciones?: string | null
+  ingredientes?: string[] | null
+  alergenos?: string[] | null
+  conservacion?: string | null
+  origen?: string | null
+  activo?: boolean | null
 }
 
 export interface Pedido {
