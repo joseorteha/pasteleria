@@ -121,6 +121,24 @@ export default function PerfilPage() {
 
       console.log('Pedidos cargados para usuario:', userId)
       console.log('Pedidos encontrados:', pedidosData)
+      
+      // Verificar si los pedidos realmente existen
+      if (pedidosData && pedidosData.length > 0) {
+        for (const pedido of pedidosData) {
+          console.log(`Verificando pedido ID: ${pedido.id}`)
+          const { data: pedidoVerificado, error } = await supabase
+            .from('pedidos')
+            .select('id')
+            .eq('id', pedido.id)
+            .single()
+          
+          if (error) {
+            console.log(`❌ Pedido ${pedido.id} NO existe en BD:`, error.message)
+          } else {
+            console.log(`✅ Pedido ${pedido.id} existe en BD`)
+          }
+        }
+      }
 
       if (pedidosData) {
         setPedidos(pedidosData)
@@ -183,6 +201,13 @@ export default function PerfilPage() {
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     router.push('/')
+  }
+
+  const handleRefreshPedidos = async () => {
+    if (!user) return
+    console.log('🔄 Recargando pedidos...')
+    setPedidos([])
+    await loadUserData(user.id)
   }
 
   if (loading) {
@@ -324,9 +349,18 @@ export default function PerfilPage() {
           <TabsContent value="pedidos">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Package className="h-5 w-5" />
-                  <span>Historial de Pedidos</span>
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Package className="h-5 w-5" />
+                    <span>Historial de Pedidos</span>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleRefreshPedidos}
+                  >
+                    🔄 Recargar
+                  </Button>
                 </CardTitle>
               </CardHeader>
               <CardContent>
