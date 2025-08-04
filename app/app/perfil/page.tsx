@@ -91,14 +91,39 @@ export default function PerfilPage() {
   const loadUserData = async (userId: string) => {
     try {
       // Cargar perfil de usuario
-      const { data: usuarioData } = await supabase
+      const { data: usuarioData, error: usuarioError } = await supabase
         .from('usuarios')
         .select('*')
         .eq('id', userId)
         .single()
 
+      console.log('Usuario data:', usuarioData)
+      console.log('Usuario error:', usuarioError)
+
       if (usuarioData) {
         setUsuario(usuarioData)
+      } else if (usuarioError && usuarioError.code === 'PGRST116') {
+        // Si el usuario no existe, crear el perfil
+        console.log('Usuario no encontrado, creando perfil...')
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data: newUsuario, error: createError } = await supabase
+            .from('usuarios')
+            .insert({
+              id: user.id,
+              nombre: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Usuario',
+              email: user.email || '',
+              telefono: '',
+              direccion: ''
+            })
+            .select()
+            .single()
+
+          if (newUsuario) {
+            setUsuario(newUsuario)
+            console.log('Perfil creado:', newUsuario)
+          }
+        }
       }
 
       // Cargar direcciones
@@ -180,7 +205,14 @@ export default function PerfilPage() {
     if (!user || !usuario) return
 
     try {
-      const { error } = await supabase
+      console.log('Actualizando perfil para usuario:', user.id)
+      console.log('Datos a actualizar:', {
+        nombre: usuario.nombre,
+        telefono: usuario.telefono,
+        direccion: usuario.direccion
+      })
+
+      const { data, error } = await supabase
         .from('usuarios')
         .update({
           nombre: usuario.nombre,
@@ -188,12 +220,19 @@ export default function PerfilPage() {
           direccion: usuario.direccion
         })
         .eq('id', user.id)
+        .select()
 
-      if (error) throw error
+      console.log('Respuesta de actualización:', { data, error })
+
+      if (error) {
+        console.error('Error al actualizar:', error)
+        throw error
+      }
 
       setSuccess('Perfil actualizado correctamente')
       setTimeout(() => setSuccess(''), 3000)
     } catch (error) {
+      console.error('Error completo:', error)
       setError('Error al actualizar el perfil')
     }
   }

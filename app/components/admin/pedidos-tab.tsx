@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Eye, CheckCircle, Clock, Package } from 'lucide-react'
 import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-server'
 import { Pedido } from '@/lib/database.types'
 import toast from 'react-hot-toast'
 
@@ -54,17 +55,25 @@ export default function PedidosTab({ pedidos, onRefresh }: PedidosTabProps) {
   const updateEstadoPedido = async (pedidoId: string, nuevoEstado: string) => {
     setLoading(pedidoId)
     try {
-      const { error } = await supabase
+      console.log('Actualizando estado del pedido:', pedidoId, 'a:', nuevoEstado)
+      
+      const { data, error } = await supabaseAdmin
         .from('pedidos')
         .update({ estado: nuevoEstado })
         .eq('id', pedidoId)
+        .select()
 
-      if (error) throw error
+      console.log('Respuesta de actualización:', { data, error })
+
+      if (error) {
+        console.error('Error al actualizar estado:', error)
+        throw error
+      }
 
       toast.success('Estado del pedido actualizado')
       onRefresh()
     } catch (error) {
-      console.error('Error updating order status:', error)
+      console.error('Error completo al actualizar estado:', error)
       toast.error('Error al actualizar el estado')
     } finally {
       setLoading(null)
