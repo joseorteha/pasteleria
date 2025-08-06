@@ -18,7 +18,8 @@ import {
   Clock,
   MessageCircle,
   Star,
-  MessageSquare
+  MessageSquare,
+  Cake
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { signOut, getCurrentUser, isAdminUser } from '@/lib/auth'
@@ -29,6 +30,7 @@ import PedidosTab from '@/components/admin/pedidos-tab'
 import ProductosTab from '@/components/admin/productos-tab'
 import ComentariosTab from '@/components/admin/comentarios-tab'
 import MensajesTab from '@/components/admin/mensajes-tab'
+import PastelesPersonalizadosTab from '@/components/admin/pasteles-personalizados-tab'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -43,7 +45,10 @@ export default function AdminDashboard() {
     totalComentarios: 0,
     promedioCalificacion: 0,
     totalMensajes: 0,
-    mensajesNuevos: 0
+    mensajesNuevos: 0,
+    totalPastelesPersonalizados: 0,
+    pastelesPendientes: 0,
+    ventasPastelesDelDia: 0
   })
 
   useEffect(() => {
@@ -86,17 +91,29 @@ export default function AdminDashboard() {
         .from('mensajes_contacto')
         .select('*')
 
+      // Fetch pasteles personalizados
+      const { data: pastelesData } = await supabase
+        .from('pasteles_personalizados')
+        .select('*')
+
       setPedidos(pedidosData || [])
       setProductos(productosData || [])
 
       // Calculate stats
       const totalPedidos = pedidosData?.length || 0
-              const pedidosPendientes = pedidosData?.filter(p => p.estado === 'Pendiente').length || 0
+      const pedidosPendientes = pedidosData?.filter(p => p.estado === 'Pendiente').length || 0
       const totalProductos = productosData?.length || 0
       const today = new Date().toDateString()
       const ventasDelDia = pedidosData?.filter(p => 
         new Date(p.created_at).toDateString() === today
       ).reduce((sum, p) => sum + p.total, 0) || 0
+      
+      // Calculate pasteles personalizados stats
+      const totalPastelesPersonalizados = pastelesData?.length || 0
+      const pastelesPendientes = pastelesData?.filter(p => p.estado === 'Pendiente').length || 0
+      const ventasPastelesDelDia = pastelesData?.filter(p => 
+        new Date(p.created_at).toDateString() === today
+      ).reduce((sum, p) => sum + p.precio_total, 0) || 0
       
       const totalComentarios = comentariosData?.length || 0
       const promedioCalificacion = comentariosData && comentariosData.length > 0 
@@ -114,7 +131,10 @@ export default function AdminDashboard() {
         totalComentarios,
         promedioCalificacion,
         totalMensajes,
-        mensajesNuevos
+        mensajesNuevos,
+        totalPastelesPersonalizados,
+        pastelesPendientes,
+        ventasPastelesDelDia
       })
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -263,6 +283,42 @@ export default function AdminDashboard() {
               </div>
             </CardContent>
           </Card>
+
+          <Card className="shadow-soft border-brand-accent">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Pasteles Personalizados</p>
+                  <p className="text-2xl font-bold text-brand-warm">{stats.totalPastelesPersonalizados}</p>
+                </div>
+                <Cake className="h-8 w-8 text-brand-primary" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-soft border-brand-accent">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Pasteles Pendientes</p>
+                  <p className="text-2xl font-bold text-orange-600">{stats.pastelesPendientes}</p>
+                </div>
+                <Clock className="h-8 w-8 text-orange-600" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-soft border-brand-accent">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Ventas Pasteles Hoy</p>
+                  <p className="text-2xl font-bold text-green-600">${stats.ventasPastelesDelDia}</p>
+                </div>
+                <TrendingUp className="h-8 w-8 text-green-600" />
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
 
         {/* Main Content */}
@@ -272,9 +328,10 @@ export default function AdminDashboard() {
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <Tabs defaultValue="pedidos" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="pedidos">Gestión de Pedidos</TabsTrigger>
               <TabsTrigger value="productos">Gestión de Productos</TabsTrigger>
+              <TabsTrigger value="pasteles">Pasteles Personalizados</TabsTrigger>
               <TabsTrigger value="comentarios">Gestión de Comentarios</TabsTrigger>
               <TabsTrigger value="mensajes">Gestión de Mensajes</TabsTrigger>
             </TabsList>
@@ -289,6 +346,10 @@ export default function AdminDashboard() {
 
             <TabsContent value="comentarios">
               <ComentariosTab onRefresh={fetchData} />
+            </TabsContent>
+
+            <TabsContent value="pasteles">
+              <PastelesPersonalizadosTab onRefresh={fetchData} />
             </TabsContent>
 
             <TabsContent value="mensajes">
