@@ -22,7 +22,8 @@ import {
   Edit,
   Trash2,
   Calendar,
-  Clock
+  Clock,
+  Cake
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { User as UserType } from '@supabase/supabase-js'
@@ -64,6 +65,31 @@ interface Favorito {
   }
 }
 
+interface PastelPersonalizado {
+  id: string
+  nombre_cliente: string
+  telefono: string
+  email: string
+  fecha_entrega: string
+  hora_entrega: string
+  notas: string
+  precio_total: number
+  estado: string
+  fecha_creacion: string
+  tamano: {
+    nombre: string
+  }
+  sabor: {
+    nombre: string
+  }
+  relleno: {
+    nombre: string
+  }
+  decoracion: {
+    nombre: string
+  }
+}
+
 export default function PerfilPage() {
   const router = useRouter()
   const [user, setUser] = useState<UserType | null>(null)
@@ -71,6 +97,7 @@ export default function PerfilPage() {
   const [direcciones, setDirecciones] = useState<Direccion[]>([])
   const [pedidos, setPedidos] = useState<Pedido[]>([])
   const [favoritos, setFavoritos] = useState<Favorito[]>([])
+  const [pastelesPersonalizados, setPastelesPersonalizados] = useState<PastelPersonalizado[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -212,6 +239,26 @@ export default function PerfilPage() {
         }
       }
 
+      // Cargar pasteles personalizados
+      const { data: pastelesData, error: pastelesError } = await supabase
+        .from('pasteles_personalizados')
+        .select(`
+          *,
+          tamano:tamanos_pastel(nombre),
+          sabor:sabores_pastel(nombre),
+          relleno:rellenos_pastel(nombre),
+          decoracion:decoraciones_pastel(nombre)
+        `)
+        .eq('usuario_id', userId)
+        .order('fecha_creacion', { ascending: false })
+
+      console.log('Pasteles personalizados data:', pastelesData)
+      console.log('Pasteles personalizados error:', pastelesError)
+
+      if (pastelesData) {
+        setPastelesPersonalizados(pastelesData)
+      }
+
     } catch (error) {
       console.error('Error loading user data:', error)
       setError('Error al cargar los datos del usuario')
@@ -306,7 +353,7 @@ export default function PerfilPage() {
         )}
 
         <Tabs defaultValue="perfil" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="perfil" className="flex items-center space-x-2">
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">Perfil</span>
@@ -314,6 +361,10 @@ export default function PerfilPage() {
             <TabsTrigger value="pedidos" className="flex items-center space-x-2">
               <Package className="h-4 w-4" />
               <span className="hidden sm:inline">Pedidos</span>
+            </TabsTrigger>
+            <TabsTrigger value="pasteles" className="flex items-center space-x-2">
+              <Cake className="h-4 w-4" />
+              <span className="hidden sm:inline">Pasteles</span>
             </TabsTrigger>
             <TabsTrigger value="favoritos" className="flex items-center space-x-2">
               <Heart className="h-4 w-4" />
@@ -465,6 +516,80 @@ export default function PerfilPage() {
                            >
                              Ver Detalles
                            </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Pasteles Personalizados */}
+          <TabsContent value="pasteles">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Cake className="h-5 w-5" />
+                  <span>Mis Pasteles Personalizados</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {pastelesPersonalizados.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Cake className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">No tienes pasteles personalizados aún</p>
+                    <Button className="mt-4" onClick={() => router.push('/pasteles-personalizados')}>
+                      Crear Pastel Personalizado
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {pastelesPersonalizados.map((pastel) => (
+                      <div key={pastel.id} className="border rounded-lg p-4">
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <h3 className="font-medium">Pastel Personalizado</h3>
+                            <p className="text-sm text-gray-600">
+                              {pastel.tamano?.nombre} - {pastel.sabor?.nombre}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Relleno: {pastel.relleno?.nombre} | Decoración: {pastel.decoracion?.nombre}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-brand-primary">${pastel.precio_total}</p>
+                            <Badge 
+                              variant={
+                                pastel.estado === 'Pendiente' ? 'secondary' :
+                                pastel.estado === 'En preparación' ? 'default' :
+                                pastel.estado === 'Listo' ? 'default' :
+                                'secondary'
+                              }
+                              className="mt-1"
+                            >
+                              {pastel.estado}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-gray-600">Fecha de entrega:</p>
+                            <p className="font-medium">{new Date(pastel.fecha_entrega).toLocaleDateString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-600">Hora de entrega:</p>
+                            <p className="font-medium">{pastel.hora_entrega || 'No especificada'}</p>
+                          </div>
+                        </div>
+                        {pastel.notas && (
+                          <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Notas especiales:</p>
+                            <p className="text-sm">{pastel.notas}</p>
+                          </div>
+                        )}
+                        <div className="mt-3 text-xs text-gray-500">
+                          Creado: {new Date(pastel.fecha_creacion).toLocaleDateString()}
                         </div>
                       </div>
                     ))}

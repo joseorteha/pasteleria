@@ -81,6 +81,13 @@ export default function Navbar() {
               Contacto
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-primary transition-all duration-300 group-hover:w-full"></span>
             </Link>
+            <Link 
+              href="/pasteles-personalizados" 
+              className="text-brand-warm hover:text-brand-primary transition-colors font-medium relative group"
+            >
+              Pasteles Personalizados
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-primary transition-all duration-300 group-hover:w-full"></span>
+            </Link>
           </div>
 
           {/* Desktop User Actions */}
@@ -189,6 +196,13 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contacto
+              </Link>
+              <Link 
+                href="/pasteles-personalizados" 
+                className="text-gray-700 hover:text-brand-primary transition-colors font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Pasteles Personalizados
               </Link>
               
               <div className="pt-4 border-t border-gray-200">
