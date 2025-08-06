@@ -53,24 +53,34 @@ export default function ConfirmacionPage() {
   }, [pedidoId])
 
   const getEstadoIcon = (estado: string) => {
-    switch (estado) {
-      case 'Pagado':
+    switch (estado.toLowerCase()) {
+      case 'completado':
+      case 'listo':
+      case 'pagado':
         return <CheckCircle className="h-5 w-5 text-green-500" />
-      case 'Pendiente':
+      case 'pendiente':
+      case 'en preparación':
         return <Clock className="h-5 w-5 text-yellow-500" />
-      default:
+      case 'cancelado':
         return <XCircle className="h-5 w-5 text-red-500" />
+      default:
+        return <CheckCircle className="h-5 w-5 text-blue-500" />
     }
   }
 
   const getEstadoColor = (estado: string) => {
-    switch (estado) {
-      case 'Pagado':
-        return 'bg-green-100 text-green-800'
-      case 'Pendiente':
-        return 'bg-yellow-100 text-yellow-800'
+    switch (estado.toLowerCase()) {
+      case 'completado':
+      case 'listo':
+      case 'pagado':
+        return 'bg-green-100 text-green-800 border-green-200'
+      case 'pendiente':
+      case 'en preparación':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      case 'cancelado':
+        return 'bg-red-100 text-red-800 border-red-200'
       default:
-        return 'bg-red-100 text-red-800'
+        return 'bg-blue-100 text-blue-800 border-blue-200'
     }
   }
 

@@ -21,6 +21,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
         fill
         className="object-contain"
         priority
+        unoptimized
       />
     </div>
   );
