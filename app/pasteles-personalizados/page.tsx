@@ -246,6 +246,9 @@ export default function PastelesPersonalizadosPage() {
         precio_total: calcularPrecioTotal()
       }
 
+      // Remover campos que pueden causar conflicto
+      const { precio_base, precio_adicional, ...insertData } = pastelData
+
       console.log('Datos del pastel a insertar:', pastelData)
 
       // Primero verificar si el usuario está autenticado
@@ -254,7 +257,7 @@ export default function PastelesPersonalizadosPage() {
 
       const { data, error: insertError } = await supabase
         .from('pasteles_personalizados')
-        .insert([pastelData])
+        .insert([insertData])
         .select()
 
       if (insertError) {
