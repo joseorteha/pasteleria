@@ -63,103 +63,6 @@ export default function CatalogoPastelesPage() {
       cargarPasteles()
     }
   }, [selectedCategoria])
-    {
-      id: 1,
-      nombre: "Pastel de Chocolate Clásico",
-      descripcion: "Delicioso pastel de chocolate con cobertura suave y decoraciones elegantes de chocolate. Perfecto para cualquier celebración.",
-      precio: 450,
-      categoria: "Chocolate",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Chocolate premium", "Crema de mantequilla", "Decoraciones de chocolate"],
-      imagen_url: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&h=500&fit=crop",
-      destacado: true,
-      disponible: true
-    },
-    {
-      id: 2,
-      nombre: "Pastel Tres Leches Decorado",
-      descripcion: "Tradicional pastel tres leches con crema batida y frutas frescas. Decorado con flores comestibles y frutos rojos.",
-      precio: 520,
-      categoria: "Tres Leches",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Leche evaporada", "Leche condensada", "Crema batida", "Frutas frescas"],
-      imagen_url: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500&h=500&fit=crop",
-      destacado: true,
-      disponible: true
-    },
-    {
-      id: 3,
-      nombre: "Pastel de Vainilla con Flores",
-      descripcion: "Elegante pastel de vainilla con cobertura suave y decoraciones florales comestibles. Ideal para bodas y eventos especiales.",
-      precio: 480,
-      categoria: "Vainilla",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Vainilla natural", "Crema de mantequilla", "Flores comestibles"],
-      imagen_url: "https://images.unsplash.com/photo-1562440499-64c9a111f713?w=500&h=500&fit=crop",
-      destacado: false,
-      disponible: true
-    },
-    {
-      id: 4,
-      nombre: "Pastel de Frutas Frescas",
-      descripcion: "Refrescante pastel con crema chantilly y una variedad de frutas frescas de temporada. Decorado con frutos rojos y kiwi.",
-      precio: 550,
-      categoria: "Frutas",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Crema chantilly", "Fresas", "Kiwi", "Uvas", "Duraznos"],
-      imagen_url: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500&h=500&fit=crop",
-      destacado: false,
-      disponible: true
-    },
-    {
-      id: 5,
-      nombre: "Pastel Red Velvet",
-      descripcion: "Clásico pastel red velvet con su característico color rojo y cobertura de queso crema. Decorado con rosas de crema.",
-      precio: 580,
-      categoria: "Red Velvet",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Cacao", "Colorante rojo", "Queso crema", "Decoraciones de crema"],
-      imagen_url: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&h=500&fit=crop",
-      destacado: true,
-      disponible: true
-    },
-    {
-      id: 6,
-      nombre: "Pastel de Café y Caramelo",
-      descripcion: "Delicioso pastel de café con relleno de caramelo y cobertura de chocolate. Decorado con granos de café y caramelo líquido.",
-      precio: 520,
-      categoria: "Café",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Café espresso", "Caramelo", "Chocolate", "Granos de café"],
-      imagen_url: "https://images.unsplash.com/photo-1562440499-64c9a111f713?w=500&h=500&fit=crop",
-      destacado: false,
-      disponible: true
-    },
-    {
-      id: 7,
-      nombre: "Pastel de Limón con Merengue",
-      descripcion: "Refrescante pastel de limón con merengue italiano y decoraciones cítricas. Perfecto para días calurosos.",
-      precio: 480,
-      categoria: "Cítricos",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Limón fresco", "Merengue italiano", "Ralladura de limón"],
-      imagen_url: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&h=500&fit=crop",
-      destacado: false,
-      disponible: true
-    },
-    {
-      id: 8,
-      nombre: "Pastel de Chocolate Blanco y Frambuesas",
-      descripcion: "Elegante pastel de chocolate blanco con frambuesas frescas y decoraciones de chocolate blanco. Ideal para eventos románticos.",
-      precio: 600,
-      categoria: "Chocolate Blanco",
-      tamaño: "Completo (8-12 porciones)",
-      ingredientes: ["Chocolate blanco", "Frambuesas frescas", "Crema de mantequilla"],
-      imagen_url: "https://images.unsplash.com/photo-1562440499-64c9a111f713?w=500&h=500&fit=crop",
-      destacado: true,
-      disponible: true
-    }
-  ]
 
   // Preparar categorías para el select
   const categoriasSelect = [
@@ -212,13 +115,13 @@ export default function CatalogoPastelesPage() {
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Filtrar por categoría" />
                 </SelectTrigger>
-                                 <SelectContent>
-                   {categoriasSelect.map((categoria) => (
-                     <SelectItem key={categoria.id} value={categoria.id}>
-                       {categoria.nombre}
-                     </SelectItem>
-                   ))}
-                 </SelectContent>
+                <SelectContent>
+                  {categoriasSelect.map((categoria) => (
+                    <SelectItem key={categoria.id} value={categoria.id}>
+                      {categoria.nombre}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
           </div>
@@ -246,79 +149,79 @@ export default function CatalogoPastelesPage() {
         {!loading && !error && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredPasteles.map((pastel, index) => (
-            <motion.div
-              key={pastel.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <Card className="h-full overflow-hidden shadow-soft hover:shadow-medium transition-all duration-300 border-0 bg-white">
-                <div className="relative">
-                  <div className="aspect-square overflow-hidden">
-                    <Image
-                      src={pastel.imagen_url}
-                      alt={pastel.nombre}
-                      width={400}
-                      height={400}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-                  
-                  {/* Badge destacado */}
-                  {pastel.destacado && (
-                    <Badge className="absolute top-3 left-3 bg-brand-primary text-white">
-                      <Star className="h-3 w-3 mr-1" />
-                      Destacado
-                    </Badge>
-                  )}
+              <motion.div
+                key={pastel.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <Card className="h-full overflow-hidden shadow-soft hover:shadow-medium transition-all duration-300 border-0 bg-white">
+                  <div className="relative">
+                    <div className="aspect-square overflow-hidden">
+                      <Image
+                        src={pastel.imagen_url}
+                        alt={pastel.nombre}
+                        width={400}
+                        height={400}
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+                    
+                    {/* Badge destacado */}
+                    {pastel.destacado && (
+                      <Badge className="absolute top-3 left-3 bg-brand-primary text-white">
+                        <Star className="h-3 w-3 mr-1" />
+                        Destacado
+                      </Badge>
+                    )}
 
-                  {/* Botones de acción */}
-                  <div className="absolute top-3 right-3 flex space-x-2">
-                                         <Button
-                       size="sm"
-                       variant="secondary"
-                       onClick={() => setSelectedPastel(pastel)}
-                     >
-                       <Eye className="h-4 w-4" />
-                     </Button>
-                     <Button 
-                       size="sm"
-                       onClick={() => handleAddToCart(pastel)}
-                     >
-                       <ShoppingCart className="h-4 w-4" />
-                     </Button>
+                    {/* Botones de acción */}
+                    <div className="absolute top-3 right-3 flex space-x-2">
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => setSelectedPastel(pastel)}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        size="sm"
+                        onClick={() => handleAddToCart(pastel)}
+                      >
+                        <ShoppingCart className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
 
-                <CardContent className="p-4">
-                  <div className="space-y-2">
-                    <h3 className="font-semibold text-gray-900 line-clamp-1">
-                      {pastel.nombre}
-                    </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2">
-                      {pastel.descripcion}
-                    </p>
-                                         <div className="flex items-center justify-between">
-                       <Badge variant="outline" className="text-xs">
-                         {pastel.categoria.nombre}
-                       </Badge>
-                       <p className="font-bold text-brand-primary">
-                         ${pastel.precio}
-                       </p>
-                     </div>
-                     <p className="text-xs text-gray-500">
-                       Pastel Completo
-                     </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-                     ))}
-         </div>
+                  <CardContent className="p-4">
+                    <div className="space-y-2">
+                      <h3 className="font-semibold text-gray-900 line-clamp-1">
+                        {pastel.nombre}
+                      </h3>
+                      <p className="text-sm text-gray-600 line-clamp-2">
+                        {pastel.descripcion}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <Badge variant="outline" className="text-xs">
+                          {pastel.categoria.nombre}
+                        </Badge>
+                        <p className="font-bold text-brand-primary">
+                          ${pastel.precio}
+                        </p>
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        Pastel Completo
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         )}
 
-                 {/* Mensaje si no hay resultados */}
-         {!loading && !error && filteredPasteles.length === 0 && (
+        {/* Mensaje si no hay resultados */}
+        {!loading && !error && filteredPasteles.length === 0 && (
           <div className="text-center py-12">
             <Cake className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -408,26 +311,26 @@ export default function CatalogoPastelesPage() {
                   </div>
                 </div>
                 
-                                 <div className="flex items-center justify-between">
-                   <div>
-                     <p className="text-sm text-gray-600">Tamaño:</p>
-                     <p className="font-medium">Pastel Completo</p>
-                   </div>
-                   <div>
-                     <p className="text-sm text-gray-600">Categoría:</p>
-                     <p className="font-medium">{selectedPastel.categoria.nombre}</p>
-                   </div>
-                 </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">Tamaño:</p>
+                    <p className="font-medium">Pastel Completo</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Categoría:</p>
+                    <p className="font-medium">{selectedPastel.categoria.nombre}</p>
+                  </div>
+                </div>
               </div>
               
               <div className="flex gap-3 mt-6">
-                                 <Button 
-                   className="flex-1"
-                   onClick={() => handleAddToCart(selectedPastel)}
-                 >
-                   <ShoppingCart className="h-4 w-4 mr-2" />
-                   Agregar al Carrito
-                 </Button>
+                <Button 
+                  className="flex-1"
+                  onClick={() => handleAddToCart(selectedPastel)}
+                >
+                  <ShoppingCart className="h-4 w-4 mr-2" />
+                  Agregar al Carrito
+                </Button>
                 <Link href="/pasteles-personalizados">
                   <Button variant="outline">
                     <Star className="h-4 w-4 mr-2" />
