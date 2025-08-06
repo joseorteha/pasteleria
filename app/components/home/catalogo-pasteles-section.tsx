@@ -5,31 +5,31 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Cake, Star, ShoppingCart, Eye } from 'lucide-react'
+import { Cake, Star, ShoppingCart, Eye, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePastelesCompletos, PastelCompleto } from '@/hooks/use-pasteles-completos'
+import { useCartStore } from '@/store/cart-store'
+import toast from 'react-hot-toast'
 
-interface Pastel {
-  id: number
-  nombre: string
-  descripcion: string
-  precio: number
-  categoria: string
-  tamaño: string
-  ingredientes: string[]
-  imagen_url: string
-  destacado: boolean
-  disponible: boolean
-}
-
-interface CatalogoPastelesSectionProps {
-  pasteles: Pastel[]
-}
-
-export default function CatalogoPastelesSection({ pasteles }: CatalogoPastelesSectionProps) {
+export default function CatalogoPastelesSection() {
   const [hoveredPastel, setHoveredPastel] = useState<number | null>(null)
+  const { pasteles, loading, error, cargarPastelesDestacados } = usePastelesCompletos()
+  const { addItem } = useCartStore()
 
   const pastelesDestacados = pasteles.filter(pastel => pastel.destacado)
+
+  const handleAddToCart = (pastel: PastelCompleto) => {
+    addItem({
+      id: `pastel-${pastel.id}`,
+      nombre: pastel.nombre,
+      precio: pastel.precio,
+      imagen: pastel.imagen_url,
+      cantidad: 1,
+      tipo: 'pastel_completo'
+    })
+    toast.success(`${pastel.nombre} agregado al carrito`)
+  }
 
   return (
     <section className="py-16 bg-gradient-to-br from-pink-50 to-rose-50">
@@ -53,14 +53,33 @@ export default function CatalogoPastelesSection({ pasteles }: CatalogoPastelesSe
           </p>
         </motion.div>
 
+        {/* Loading state */}
+        {loading && (
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+            <span className="ml-2 text-gray-600">Cargando pasteles...</span>
+          </div>
+        )}
+
+        {/* Error state */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={cargarPastelesDestacados}>
+              Intentar de nuevo
+            </Button>
+          </div>
+        )}
+
         {/* Grid de pasteles destacados */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
-        >
-          {pastelesDestacados.map((pastel, index) => (
+        {!loading && !error && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          >
+            {pastelesDestacados.map((pastel, index) => (
             <motion.div
               key={pastel.id}
               initial={{ opacity: 0, y: 20 }}
@@ -96,16 +115,19 @@ export default function CatalogoPastelesSection({ pasteles }: CatalogoPastelesSe
                       animate={{ opacity: 1 }}
                       className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
                     >
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="secondary">
-                          <Eye className="h-4 w-4 mr-1" />
-                          Ver
-                        </Button>
-                        <Button size="sm">
-                          <ShoppingCart className="h-4 w-4 mr-1" />
-                          Ordenar
-                        </Button>
-                      </div>
+                                           <div className="flex space-x-2">
+                       <Button size="sm" variant="secondary">
+                         <Eye className="h-4 w-4 mr-1" />
+                         Ver
+                       </Button>
+                       <Button 
+                         size="sm"
+                         onClick={() => handleAddToCart(pastel)}
+                       >
+                         <ShoppingCart className="h-4 w-4 mr-1" />
+                         Agregar
+                       </Button>
+                     </div>
                     </motion.div>
                   )}
                 </div>
@@ -118,23 +140,24 @@ export default function CatalogoPastelesSection({ pasteles }: CatalogoPastelesSe
                     <p className="text-sm text-gray-600 line-clamp-2">
                       {pastel.descripcion}
                     </p>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs">
-                        {pastel.categoria}
-                      </Badge>
-                      <p className="font-bold text-brand-primary">
-                        ${pastel.precio}
-                      </p>
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      {pastel.tamaño}
-                    </p>
+                                         <div className="flex items-center justify-between">
+                       <Badge variant="outline" className="text-xs">
+                         {pastel.categoria.nombre}
+                       </Badge>
+                       <p className="font-bold text-brand-primary">
+                         ${pastel.precio}
+                       </p>
+                     </div>
+                     <p className="text-xs text-gray-500">
+                       Pastel Completo
+                     </p>
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
-        </motion.div>
+                     ))}
+         </motion.div>
+        )}
 
         {/* CTA */}
         <motion.div
