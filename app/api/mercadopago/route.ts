@@ -19,6 +19,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Verificar variables de entorno
+    const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN
+    if (!accessToken) {
+      console.error('API MercadoPago: Access token no configurado')
+      return NextResponse.json(
+        { error: 'Configuración de MercadoPago no encontrada' },
+        { status: 500 }
+      )
+    }
+
     // Formatear items para MercadoPago
     const mpItems = items.map((item: any) => ({
       title: item.nombre,
@@ -51,17 +61,29 @@ export async function POST(request: NextRequest) {
 
     console.log('API MercadoPago: Preferencia a crear:', preference)
 
-    // Aquí normalmente harías la llamada a MercadoPago
-    // Por ahora simulamos la respuesta
-    const mockResponse = {
-      id: `pref_${Date.now()}`,
-      init_point: `https://www.mercadopago.com.mx/checkout/v1/redirect?pref_id=pref_${Date.now()}`,
-      sandbox_init_point: `https://sandbox.mercadopago.com.mx/checkout/v1/redirect?pref_id=pref_${Date.now()}`
+    // Llamada real a MercadoPago
+    const response = await fetch('https://api.mercadopago.com/checkout/preferences', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(preference)
+    })
+
+    if (!response.ok) {
+      const errorData = await response.text()
+      console.error('API MercadoPago: Error en respuesta:', errorData)
+      return NextResponse.json(
+        { error: 'Error al crear preferencia en MercadoPago' },
+        { status: response.status }
+      )
     }
 
-    console.log('API MercadoPago: Respuesta simulada:', mockResponse)
+    const data = await response.json()
+    console.log('API MercadoPago: Respuesta exitosa:', data)
 
-    return NextResponse.json(mockResponse)
+    return NextResponse.json(data)
   } catch (error) {
     console.error('API MercadoPago: Error:', error)
     return NextResponse.json(
