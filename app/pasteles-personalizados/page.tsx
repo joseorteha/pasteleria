@@ -229,29 +229,43 @@ export default function PastelesPersonalizadosPage() {
       }
 
       // Crear pastel personalizado
+      const pastelData = {
+        usuario_id: user?.id,
+        nombre_cliente: clienteData.nombre,
+        telefono: clienteData.telefono,
+        email: clienteData.email,
+        fecha_entrega: clienteData.fecha_entrega,
+        hora_entrega: clienteData.hora_entrega || null,
+        notas: clienteData.notas,
+        tamano_id: seleccion.tamano_id,
+        sabor_id: seleccion.sabor_id,
+        relleno_id: seleccion.relleno_id,
+        decoracion_id: seleccion.decoracion_id,
+        precio_base: tamanos.find(t => t.id === seleccion.tamano_id)?.precio_base || 0,
+        precio_adicional: 0,
+        precio_total: calcularPrecioTotal()
+      }
+
+      console.log('Datos del pastel a insertar:', pastelData)
+
+      // Primero verificar si el usuario está autenticado
+      const { data: { user: currentUser } } = await supabase.auth.getUser()
+      console.log('Usuario actual:', currentUser?.id)
+
       const { data, error: insertError } = await supabase
         .from('pasteles_personalizados')
-        .insert([{
-          usuario_id: user?.id,
-          nombre_cliente: clienteData.nombre,
-          telefono: clienteData.telefono,
-          email: clienteData.email,
-          fecha_entrega: clienteData.fecha_entrega,
-          hora_entrega: clienteData.hora_entrega || null,
-          notas: clienteData.notas,
-          tamano_id: seleccion.tamano_id,
-          sabor_id: seleccion.sabor_id,
-          relleno_id: seleccion.relleno_id,
-          decoracion_id: seleccion.decoracion_id,
-          precio_base: tamanos.find(t => t.id === seleccion.tamano_id)?.precio_base || 0,
-          precio_adicional: 0,
-          precio_total: calcularPrecioTotal()
-        }])
+        .insert([pastelData])
         .select()
 
       if (insertError) {
         console.error('Error creating pastel:', insertError)
-        throw new Error('Error al crear el pedido del pastel')
+        console.error('Error details:', {
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint,
+          code: insertError.code
+        })
+        throw new Error(`Error al crear el pedido del pastel: ${insertError.message}`)
       }
 
       toast.success('¡Pastel personalizado creado exitosamente!')
