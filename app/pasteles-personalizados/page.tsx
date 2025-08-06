@@ -246,8 +246,8 @@ export default function PastelesPersonalizadosPage() {
         precio_total: calcularPrecioTotal()
       }
 
-      // Remover campos que pueden causar conflicto
-      const { precio_base, precio_adicional, ...insertData } = pastelData
+      // Incluir precio_base pero no precio_adicional para evitar conflictos
+      const { precio_adicional, ...insertData } = pastelData
 
       console.log('Datos del pastel a insertar:', pastelData)
 
