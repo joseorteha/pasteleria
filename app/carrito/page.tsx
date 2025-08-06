@@ -151,7 +151,17 @@ export default function CarritoPage() {
       clearCart()
 
       // Redirigir a MercadoPago
-      window.location.href = result.sandboxInitPoint || result.initPoint
+      console.log('Resultado de MercadoPago:', result)
+      
+      const redirectUrl = result.sandbox_init_point || result.init_point || result.sandboxInitPoint || result.initPoint
+      
+      if (!redirectUrl) {
+        console.error('No se recibió URL de redirección de MercadoPago')
+        throw new Error('Error: No se recibió URL de pago de MercadoPago')
+      }
+      
+      console.log('Redirigiendo a:', redirectUrl)
+      window.location.href = redirectUrl
 
     } catch (error) {
       console.error('Error creating order:', error)

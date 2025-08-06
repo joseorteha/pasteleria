@@ -85,7 +85,18 @@ export async function POST(request: NextRequest) {
     const data = await response.json()
     console.log('API MercadoPago: Respuesta exitosa:', data)
 
-    return NextResponse.json(data)
+    // Asegurar que devolvemos los campos correctos
+    const responseData = {
+      id: data.id,
+      preferenceId: data.id,
+      init_point: data.init_point,
+      sandbox_init_point: data.sandbox_init_point,
+      initPoint: data.init_point,
+      sandboxInitPoint: data.sandbox_init_point
+    }
+
+    console.log('API MercadoPago: Datos de respuesta formateados:', responseData)
+    return NextResponse.json(responseData)
   } catch (error) {
     console.error('API MercadoPago: Error:', error)
     return NextResponse.json(
