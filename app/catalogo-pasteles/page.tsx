@@ -1,42 +1,68 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Cake, Star, ShoppingCart, Eye, Search, Filter } from 'lucide-react'
+import { Cake, Star, ShoppingCart, Eye, Search, Filter, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-
-interface Pastel {
-  id: number
-  nombre: string
-  descripcion: string
-  precio: number
-  categoria: string
-  tamaño: string
-  ingredientes: string[]
-  imagen_url: string
-  destacado: boolean
-  disponible: boolean
-}
-
-interface Categoria {
-  id: string
-  nombre: string
-  descripcion: string
-}
+import { usePastelesCompletos, PastelCompleto } from '@/hooks/use-pasteles-completos'
+import { useCartStore } from '@/store/cart-store'
+import toast from 'react-hot-toast'
 
 export default function CatalogoPastelesPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategoria, setSelectedCategoria] = useState<string>('todos')
-  const [selectedPastel, setSelectedPastel] = useState<Pastel | null>(null)
+  const [selectedPastel, setSelectedPastel] = useState<PastelCompleto | null>(null)
+  const { pasteles, categorias, loading, error, cargarPasteles, cargarPastelesPorCategoria, buscarPasteles } = usePastelesCompletos()
+  const { addItem } = useCartStore()
 
-  // Datos de pasteles (en un proyecto real vendrían de una API)
-  const pasteles: Pastel[] = [
+  // Filtrar pasteles
+  const filteredPasteles = pasteles.filter(pastel => {
+    const matchesSearch = pastel.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         pastel.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategoria = selectedCategoria === 'todos' || 
+                            pastel.categoria.nombre.toLowerCase().includes(selectedCategoria.toLowerCase())
+    
+    return matchesSearch && matchesCategoria
+  })
+
+  const handleAddToCart = (pastel: PastelCompleto) => {
+    addItem({
+      id: `pastel-${pastel.id}`,
+      nombre: pastel.nombre,
+      precio: pastel.precio,
+      imagen: pastel.imagen_url,
+      cantidad: 1,
+      tipo: 'pastel_completo'
+    })
+    toast.success(`${pastel.nombre} agregado al carrito`)
+  }
+
+  // Efecto para buscar cuando cambia el término
+  useEffect(() => {
+    if (searchTerm.trim()) {
+      buscarPasteles(searchTerm)
+    } else {
+      cargarPasteles()
+    }
+  }, [searchTerm])
+
+  // Efecto para filtrar por categoría
+  useEffect(() => {
+    if (selectedCategoria !== 'todos') {
+      const categoria = categorias.find(cat => cat.nombre.toLowerCase().includes(selectedCategoria.toLowerCase()))
+      if (categoria) {
+        cargarPastelesPorCategoria(categoria.id)
+      }
+    } else {
+      cargarPasteles()
+    }
+  }, [selectedCategoria])
     {
       id: 1,
       nombre: "Pastel de Chocolate Clásico",
@@ -135,27 +161,15 @@ export default function CatalogoPastelesPage() {
     }
   ]
 
-  const categorias: Categoria[] = [
+  // Preparar categorías para el select
+  const categoriasSelect = [
     { id: "todos", nombre: "Todos", descripcion: "Todos los pasteles" },
-    { id: "chocolate", nombre: "Chocolate", descripcion: "Pasteles elaborados con chocolate premium" },
-    { id: "tres-leches", nombre: "Tres Leches", descripcion: "Tradicionales pasteles tres leches" },
-    { id: "vainilla", nombre: "Vainilla", descripcion: "Clásicos pasteles de vainilla" },
-    { id: "frutas", nombre: "Frutas", descripcion: "Pasteles con frutas frescas" },
-    { id: "red-velvet", nombre: "Red Velvet", descripcion: "Elegantes pasteles red velvet" },
-    { id: "cafe", nombre: "Café", descripcion: "Pasteles con sabor a café" },
-    { id: "citricos", nombre: "Cítricos", descripcion: "Pasteles refrescantes de limón" },
-    { id: "chocolate-blanco", nombre: "Chocolate Blanco", descripcion: "Deliciosos pasteles de chocolate blanco" }
+    ...categorias.map(cat => ({
+      id: cat.nombre.toLowerCase(),
+      nombre: cat.nombre,
+      descripcion: cat.descripcion
+    }))
   ]
-
-  // Filtrar pasteles
-  const filteredPasteles = pasteles.filter(pastel => {
-    const matchesSearch = pastel.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         pastel.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategoria = selectedCategoria === 'todos' || 
-                            pastel.categoria.toLowerCase().includes(selectedCategoria.toLowerCase())
-    
-    return matchesSearch && matchesCategoria
-  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-50">
@@ -198,21 +212,40 @@ export default function CatalogoPastelesPage() {
                   <Filter className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Filtrar por categoría" />
                 </SelectTrigger>
-                <SelectContent>
-                  {categorias.map((categoria) => (
-                    <SelectItem key={categoria.id} value={categoria.id}>
-                      {categoria.nombre}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                                 <SelectContent>
+                   {categoriasSelect.map((categoria) => (
+                     <SelectItem key={categoria.id} value={categoria.id}>
+                       {categoria.nombre}
+                     </SelectItem>
+                   ))}
+                 </SelectContent>
               </Select>
             </div>
           </div>
         </div>
 
+        {/* Loading state */}
+        {loading && (
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+            <span className="ml-2 text-gray-600">Cargando pasteles...</span>
+          </div>
+        )}
+
+        {/* Error state */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={cargarPasteles}>
+              Intentar de nuevo
+            </Button>
+          </div>
+        )}
+
         {/* Grid de pasteles */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredPasteles.map((pastel, index) => (
+        {!loading && !error && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredPasteles.map((pastel, index) => (
             <motion.div
               key={pastel.id}
               initial={{ opacity: 0, y: 20 }}
@@ -241,16 +274,19 @@ export default function CatalogoPastelesPage() {
 
                   {/* Botones de acción */}
                   <div className="absolute top-3 right-3 flex space-x-2">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => setSelectedPastel(pastel)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm">
-                      <ShoppingCart className="h-4 w-4" />
-                    </Button>
+                                         <Button
+                       size="sm"
+                       variant="secondary"
+                       onClick={() => setSelectedPastel(pastel)}
+                     >
+                       <Eye className="h-4 w-4" />
+                     </Button>
+                     <Button 
+                       size="sm"
+                       onClick={() => handleAddToCart(pastel)}
+                     >
+                       <ShoppingCart className="h-4 w-4" />
+                     </Button>
                   </div>
                 </div>
 
@@ -262,26 +298,27 @@ export default function CatalogoPastelesPage() {
                     <p className="text-sm text-gray-600 line-clamp-2">
                       {pastel.descripcion}
                     </p>
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-xs">
-                        {pastel.categoria}
-                      </Badge>
-                      <p className="font-bold text-brand-primary">
-                        ${pastel.precio}
-                      </p>
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      {pastel.tamaño}
-                    </p>
+                                         <div className="flex items-center justify-between">
+                       <Badge variant="outline" className="text-xs">
+                         {pastel.categoria.nombre}
+                       </Badge>
+                       <p className="font-bold text-brand-primary">
+                         ${pastel.precio}
+                       </p>
+                     </div>
+                     <p className="text-xs text-gray-500">
+                       Pastel Completo
+                     </p>
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
-        </div>
+                     ))}
+         </div>
+        )}
 
-        {/* Mensaje si no hay resultados */}
-        {filteredPasteles.length === 0 && (
+                 {/* Mensaje si no hay resultados */}
+         {!loading && !error && filteredPasteles.length === 0 && (
           <div className="text-center py-12">
             <Cake className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -371,23 +408,26 @@ export default function CatalogoPastelesPage() {
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Tamaño:</p>
-                    <p className="font-medium">{selectedPastel.tamaño}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Categoría:</p>
-                    <p className="font-medium">{selectedPastel.categoria}</p>
-                  </div>
-                </div>
+                                 <div className="flex items-center justify-between">
+                   <div>
+                     <p className="text-sm text-gray-600">Tamaño:</p>
+                     <p className="font-medium">Pastel Completo</p>
+                   </div>
+                   <div>
+                     <p className="text-sm text-gray-600">Categoría:</p>
+                     <p className="font-medium">{selectedPastel.categoria.nombre}</p>
+                   </div>
+                 </div>
               </div>
               
               <div className="flex gap-3 mt-6">
-                <Button className="flex-1">
-                  <ShoppingCart className="h-4 w-4 mr-2" />
-                  Agregar al Carrito
-                </Button>
+                                 <Button 
+                   className="flex-1"
+                   onClick={() => handleAddToCart(selectedPastel)}
+                 >
+                   <ShoppingCart className="h-4 w-4 mr-2" />
+                   Agregar al Carrito
+                 </Button>
                 <Link href="/pasteles-personalizados">
                   <Button variant="outline">
                     <Star className="h-4 w-4 mr-2" />
