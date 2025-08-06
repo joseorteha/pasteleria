@@ -75,7 +75,7 @@ interface PastelPersonalizado {
   notas: string
   precio_total: number
   estado: string
-  fecha_creacion: string
+  created_at: string
   tamano: {
     nombre: string
   }
@@ -250,7 +250,7 @@ export default function PerfilPage() {
           decoracion:decoraciones_pastel(nombre)
         `)
         .eq('usuario_id', userId)
-        .order('fecha_creacion', { ascending: false })
+        .order('created_at', { ascending: false })
 
       console.log('Pasteles personalizados data:', pastelesData)
       console.log('Pasteles personalizados error:', pastelesError)
@@ -589,7 +589,7 @@ export default function PerfilPage() {
                           </div>
                         )}
                         <div className="mt-3 text-xs text-gray-500">
-                          Creado: {new Date(pastel.fecha_creacion).toLocaleDateString()}
+                          Creado: {new Date(pastel.created_at).toLocaleDateString()}
                         </div>
                       </div>
                     ))}
