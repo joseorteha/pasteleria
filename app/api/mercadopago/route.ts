@@ -6,10 +6,12 @@ export async function POST(request: NextRequest) {
     console.log('API MercadoPago: Iniciando creación de preferencia')
     
     const body = await request.json()
-    const { items, user } = body
+    console.log('API MercadoPago: Body completo recibido:', body)
+
+    const { items, payer, back_urls, external_reference } = body
 
     console.log('API MercadoPago: Items recibidos:', items)
-    console.log('API MercadoPago: User recibido:', user)
+    console.log('API MercadoPago: Payer recibido:', payer)
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       console.error('API MercadoPago: Items inválidos')
@@ -31,9 +33,9 @@ export async function POST(request: NextRequest) {
 
     // Formatear items para MercadoPago
     const mpItems = items.map((item: any) => ({
-      title: item.nombre,
-      unit_price: Number(item.precio),
-      quantity: Number(item.cantidad),
+      title: item.title || item.nombre,
+      unit_price: Number(item.unit_price || item.precio),
+      quantity: Number(item.quantity || item.cantidad),
       currency_id: 'MXN'
     }))
 
@@ -42,20 +44,20 @@ export async function POST(request: NextRequest) {
     // Crear preferencia en MercadoPago
     const preference = {
       items: mpItems,
-      payer: {
-        name: user?.nombre || 'Cliente',
-        email: user?.email || 'cliente@example.com',
+      payer: payer || {
+        name: 'Cliente',
+        email: 'cliente@example.com',
         phone: {
-          number: user?.telefono || '0000000000'
+          number: '0000000000'
         }
       },
-      back_urls: {
+      back_urls: back_urls || {
         success: `${process.env.NEXT_PUBLIC_APP_URL || 'https://pasteleria-mairim.vercel.app'}/confirmacion`,
         failure: `${process.env.NEXT_PUBLIC_APP_URL || 'https://pasteleria-mairim.vercel.app'}/carrito`,
         pending: `${process.env.NEXT_PUBLIC_APP_URL || 'https://pasteleria-mairim.vercel.app'}/carrito`
       },
       auto_return: 'approved',
-      external_reference: `pedido_${Date.now()}`,
+      external_reference: external_reference || `pedido_${Date.now()}`,
       notification_url: `${process.env.NEXT_PUBLIC_APP_URL || 'https://pasteleria-mairim.vercel.app'}/api/mercadopago/webhook`
     }
 
